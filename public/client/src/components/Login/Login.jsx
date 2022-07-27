@@ -9,8 +9,8 @@ function Login() {
                     <img src="/assets//welcone/logo.svg" alt="로고" />
                 </div>
                 <form className="login-contentw">
-                    <div className="email-inp">이메일</div>
-                    <div className="password-inp">비밀번호</div>
+                    <div className="email-inp"></div>
+                    <div className="password-inp"></div>
                 </form>
             </div>
         </div>
