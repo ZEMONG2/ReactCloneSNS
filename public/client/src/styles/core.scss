@@ -40,3 +40,10 @@ img {
 .txt-bold {
   font-weight: 700;
 }
+
+input,
+textarea {
+  &:focus {
+    outline: none;
+  }
+}

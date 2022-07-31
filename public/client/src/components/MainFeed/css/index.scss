@@ -1,0 +1,57 @@
+$class-101-white-200: #fafafa;
+$class-101-gray200: #454545;
+$class-101-gray: #c8c8c8;
+
+#root {
+    .mainfeed {
+        padding-top: 54px;
+        background-color: $class-101-white-200;
+
+        .wrapper {
+            width: 1000px;
+            margin: 0 auto;
+
+            .feed-list {
+                .write-feed {
+                    background-color: white;
+                    display: flex;
+                    align-items: center;
+                    padding: 20px 24px;
+                    width: 729px;
+                    border: 1px solid $class-101-gray;
+
+                    .profile-image {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 40px;
+                        background-color: $class-101-gray200;
+                        margin-right: 12px;
+                    }
+
+                    .inp {
+                        flex: 1;
+
+                        input {
+                            width: 100%;
+                            font-size: 12px;
+                            color: $class-101-gray200;
+                            border: none;
+                        }
+                    }
+
+                    .get-image {
+                        label {
+                            width: 30px;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        input {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
