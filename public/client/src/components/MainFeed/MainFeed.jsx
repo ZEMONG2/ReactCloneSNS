@@ -1,6 +1,8 @@
 import FBA from '@config/firebaseApp';
 import React, { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import Feed from './components/Feed';
+import Friend from './components/Friend';
 import './css/index.css';
 
 const Fstorage = FBA.storage();
@@ -33,6 +35,9 @@ function MainFeed() {
   const session = useSelector((state) => state.auth.session);
   const [context, setContext] = useState(undefined);
   const [feed_image, setFeed_image] = useState(undefined);
+  const following = useSelector((state) => state.auth.following);
+  const followers = useSelector((state) => state.auth.follower);
+  const feeds = useSelector((state) => state.auth.feeds);
 
   const __makeFeed = useCallback(
     async (e) => {
@@ -67,7 +72,8 @@ function MainFeed() {
             profile: {
               uid
             },
-            timestamp: nowTime
+            timestamp: nowTime,
+            followers
           })
         })
           .then((res) => res.json())
@@ -83,7 +89,7 @@ function MainFeed() {
           });
       }
     },
-    [context, feed_image, session, contextRef]
+    [context, feed_image, session, contextRef, followers]
   );
 
   const __getData64FromImage = useCallback((e) => {
@@ -118,95 +124,10 @@ function MainFeed() {
               <input id="get-image-input" type="file" onChange={__getData64FromImage} />
             </div>
           </form>
-
-          <div className="feed">
-            <div className="top">
-              <div className="profile-image"></div>
-              <div className="profile-desc">
-                <div className="nickname txt-bold">ZEMONG</div>
-                <div className="timestamp">8:15 pm, yesterday</div>
-              </div>
-            </div>
-            <div className="contents">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto debitis facere,
-              corrupi consectetur soluta sit minima harum aspernatur. Rerum, nulla nisi laudantium
-              quae obcaecati dolorum ullam saepe eos in voluptates?
-              <div className="image"></div>
-            </div>
-            <div className="bottom">
-              <div className="like">
-                <div className="asset">
-                  <img src="/assets/feed/like-dac.svg" alt="좋아요" />
-                </div>
-                <div className="count txt-bold">25k</div>
-              </div>
-              <div className="comment">
-                <div className="asset">
-                  <img src="/assets/feed/comment.svg" alt="댓글" />
-                </div>
-                <div className="count txt-bold">2k</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="feed">
-            <div className="top">
-              <div className="profile-image"></div>
-              <div className="profile-desc">
-                <div className="nickname txt-bold">ZEMONG</div>
-                <div className="timestamp">8:15 pm, yesterday</div>
-              </div>
-            </div>
-            <div className="contents">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto debitis facere,
-              corrupi consectetur soluta sit minima harum aspernatur. Rerum, nulla nisi laudantium
-              quae obcaecati dolorum ullam saepe eos in voluptates?
-            </div>
-            <div className="bottom">
-              <div className="like">
-                <div className="asset">
-                  <img src="/assets/feed/like-dac.svg" alt="좋아요" />
-                </div>
-                <div className="count txt-bold">25k</div>
-              </div>
-              <div className="comment">
-                <div className="asset">
-                  <img src="/assets/feed/comment.svg" alt="댓글" />
-                </div>
-                <div className="count txt-bold">2k</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="feed">
-            <div className="top">
-              <div className="profile-image"></div>
-              <div className="profile-desc">
-                <div className="nickname txt-bold">ZEMONG</div>
-                <div className="timestamp">8:15 pm, yesterday</div>
-              </div>
-            </div>
-            <div className="contents">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto debitis facere,
-              corrupi consectetur soluta sit minima harum aspernatur. Rerum, nulla nisi laudantium
-              quae obcaecati dolorum ullam saepe eos in voluptates?
-              <div className="image"></div>
-            </div>
-            <div className="bottom">
-              <div className="like">
-                <div className="asset">
-                  <img src="/assets/feed/like-dac.svg" alt="좋아요" />
-                </div>
-                <div className="count txt-bold">25k</div>
-              </div>
-              <div className="comment">
-                <div className="asset">
-                  <img src="/assets/feed/comment.svg" alt="댓글" />
-                </div>
-                <div className="count txt-bold">2k</div>
-              </div>
-            </div>
-          </div>
+          {feeds.map((item, idx) => {
+            console.log(item);
+            return <Feed fid={item} key={idx} />;
+          })}
         </div>
         <div className="friend-list">
           <div className="my-profile">
@@ -216,34 +137,10 @@ function MainFeed() {
           <div className="my-friends">
             <div className="title txt-bold">나의친구</div>
             <ul className="friend-list-wrapper">
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
-              <li className="friend">
-                <div className="profile-image"></div>
-                <div className="nickname txt-bold">Mickey_lover</div>
-              </li>
+              {following.map((item, idx) => {
+                const { uid } = item;
+                return <Friend key={uid} uid={uid} />;
+              })}
             </ul>
           </div>
         </div>

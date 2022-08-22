@@ -59,6 +59,7 @@ function Login() {
   }, [history]);
 
   useEffect(() => {
+    Fauth.signOut();
     dispatch({
       type: __UPDATE_HEADER_STATE__,
       payload: false
