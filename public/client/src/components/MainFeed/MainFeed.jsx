@@ -1,5 +1,6 @@
 import FBA from '@config/firebaseApp';
 import React, { useCallback, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Feed from './components/Feed';
 import Friend from './components/Friend';
@@ -103,6 +104,39 @@ function MainFeed() {
 
     reader.readAsDataURL(filelist);
   }, []);
+
+  const __getUserProfileImage = useCallback(() => {
+    if (session) {
+      const { uid } = session;
+
+      let url = '/user/profile/image';
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Allow-Control-Access-Origin': '*'
+        },
+        body: JSON.stringify({
+          uid
+        })
+      })
+        .then((res) => res.json())
+        .then(({ image }) => {
+          console.log(image);
+          // setUserImage(image);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [session]);
+
+  useEffect(() => {
+    __getUserProfileImage();
+    return () => {};
+  }, [__getUserProfileImage]);
+
   return (
     <div className="mainfeed">
       <div className="wrapper">
@@ -132,7 +166,7 @@ function MainFeed() {
         <div className="friend-list">
           <div className="my-profile">
             <div className="profile-image"></div>
-            <div className="nickname txt-bold">ZEMONG</div>
+            <div className="nickname txt-bold">{session && session.displayName}</div>
           </div>
           <div className="my-friends">
             <div className="title txt-bold">나의친구</div>

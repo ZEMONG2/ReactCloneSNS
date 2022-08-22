@@ -70,6 +70,9 @@
   border-radius: 40px;
   background-color: #c8c8c8;
   margin-right: 12px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .mainfeed .wrapper .feed-list .feed .top .profile-desc .nickname {
   font-size: 14px;
