@@ -39,6 +39,7 @@ function MainFeed() {
   const following = useSelector((state) => state.auth.following);
   const followers = useSelector((state) => state.auth.follower);
   const feeds = useSelector((state) => state.auth.feeds);
+  const [userProfileImage, setUserProfileImage] = useState(undefined);
 
   const __makeFeed = useCallback(
     async (e) => {
@@ -123,8 +124,7 @@ function MainFeed() {
       })
         .then((res) => res.json())
         .then(({ image }) => {
-          console.log(image);
-          // setUserImage(image);
+          setUserProfileImage(image);
         })
         .catch((err) => {
           console.log(err);
@@ -142,7 +142,10 @@ function MainFeed() {
       <div className="wrapper">
         <div className="feed-list">
           <form className="write-feed" onSubmit={__makeFeed}>
-            <div className="profile-image"></div>
+            <div
+              className="profile-image"
+              style={userProfileImage && { backgroundImage: `url(${userProfileImage})` }}
+            ></div>
             <div className="inp">
               <input
                 ref={contextRef}
@@ -159,13 +162,16 @@ function MainFeed() {
             </div>
           </form>
           {feeds.map((item, idx) => {
-            console.log(item);
+            // console.log(item);
             return <Feed fid={item} key={idx} />;
           })}
         </div>
         <div className="friend-list">
           <div className="my-profile">
-            <div className="profile-image"></div>
+            <div
+              className="profile-image"
+              style={userProfileImage && { backgroundImage: `url(${userProfileImage})` }}
+            ></div>
             <div className="nickname txt-bold">{session && session.displayName}</div>
           </div>
           <div className="my-friends">

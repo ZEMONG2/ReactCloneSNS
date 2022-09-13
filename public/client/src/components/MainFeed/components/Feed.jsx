@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { __UPDATE_DETAIL_STATE__, __UPDATE_DETAIL_DATA__ } from '@dispatchers/layout';
 
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -26,6 +27,7 @@ function makeFeedTime(timestamp) {
 }
 
 function Feed({ fid }) {
+  const dispatch = useDispatch();
   const [
     {
       feed: { like, comment, context, image },
@@ -47,6 +49,32 @@ function Feed({ fid }) {
   });
   const session = useSelector((state) => state.auth.session);
   const [userImage, setUserImage] = useState(undefined);
+  const [userNickname, setUserNickname] = useState(undefined);
+
+  const __getUserNickname = useCallback(() => {
+    if (uid) {
+      let url = '/user/profile/nickname';
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Allow-Control-Access-Origin': '*'
+        },
+        body: JSON.stringify({
+          uid
+        })
+      })
+        .then((res) => res.json())
+        .then(({ nickname }) => {
+          setUserNickname(nickname);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [uid]);
+
   const __getUserProfileFromServer = useCallback(() => {
     if (uid) {
       let url = '/user/profile/image';
@@ -93,18 +121,48 @@ function Feed({ fid }) {
       });
   }, [fid]);
 
+  const __openFeedDetail = useCallback(() => {
+    const feedData = {
+      fid,
+      feed: {
+        like,
+        comment,
+        image,
+        context
+      },
+      profile: { uid, nickname: userNickname ? userNickname : 'ZEMONG', image: userImage },
+      timestamp,
+      config: {
+        time: makeFeedTime(timestamp)
+      }
+    };
+    console.log(feedData);
+    dispatch({
+      type: __UPDATE_DETAIL_DATA__,
+      payload: feedData
+    });
+    dispatch({
+      type: __UPDATE_DETAIL_STATE__,
+      payload: true
+    });
+  }, [dispatch, like, comment, image, context, uid, timestamp, userImage, userNickname, fid]);
+
   useEffect(() => {
     __getData();
     __getUserProfileFromServer();
+    __getUserNickname();
     return () => {};
-  }, [__getUserProfileFromServer, __getData]);
+  }, [__getUserProfileFromServer, __getData, __getUserNickname]);
 
   return (
-    <div className="feed">
+    <div className="feed" onClick={__openFeedDetail}>
       <div className="top">
-        <div className="profile-image" style={{ backgroundImage: `url(${userImage})` }}></div>
+        <div
+          className="profile-image"
+          style={userImage && { backgroundImage: `url(${userImage})` }}
+        ></div>
         <div className="profile-desc">
-          <div className="nickname txt-bold">{session ? session.displayName : 'ZEMONG'}</div>
+          <div className="nickname txt-bold">{userNickname ? userNickname : 'ZEMONG'}</div>
           <div className="timestamp">{makeFeedTime(timestamp)}</div>
         </div>
       </div>
@@ -125,7 +183,7 @@ function Feed({ fid }) {
           <div className="asset">
             <img src="/assets/feed/comment.svg" alt="댓글" />
           </div>
-          <div className="count txt-bold">{comment ? 100 : 0}</div>
+          <div className="count txt-bold">{comment ? Object.keys(comment).length : 0}</div>
         </div>
       </div>
     </div>

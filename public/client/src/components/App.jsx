@@ -14,6 +14,7 @@ import {
   __UPDATE_FEEDS__,
   __UPDATE_FOLLOWER__,
   __UPDATE_FOLLOWING__,
+  __UPDATE_LIKE_LIST__,
   __UPDATE_SESSION__
 } from '@dispatchers/auth';
 import { __UPDATE_HEADER_STATE__ } from '@dispatchers/layout';
@@ -25,6 +26,30 @@ function App() {
   const [uid, setUid] = useState(undefined);
   const dispatch = useDispatch();
   const isHeaderOpen = useSelector((state) => state.layouts.isHeaderOpen);
+  const isDetailOpen = useSelector((state) => state.layouts.isDetailOpen);
+
+  const __getLikeList = useCallback(() => {
+    if (uid) {
+      const likelistRef = Fdatabase.ref(`users/${uid}/likelist`);
+      likelistRef.on('value', (snapshot) => {
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          dispatch({
+            type: __UPDATE_LIKE_LIST__,
+            payload: Object.values(val)
+          });
+        } else {
+          dispatch({
+            type: __UPDATE_LIKE_LIST__,
+            payload: []
+          });
+        }
+      });
+      return likelistRef;
+    } else {
+      return undefined;
+    }
+  }, [uid, dispatch]);
 
   const __getFollowings = useCallback(() => {
     if (uid) {
@@ -167,6 +192,7 @@ function App() {
     const followersRef = __getFollowers();
     const followingRef = __getFollowings();
     const feedRef = __getFeeds();
+    const likelistRef = __getLikeList();
 
     return () => {
       if (followersRef) {
@@ -178,8 +204,11 @@ function App() {
       if (feedRef) {
         feedRef.off();
       }
+      if (likelistRef) {
+        likelistRef.off();
+      }
     };
-  }, [__getFollowers, __getFollowings, __getFeeds]);
+  }, [__getFollowers, __getFollowings, __getFeeds, __getLikeList]);
 
   return (
     <Router>
@@ -191,7 +220,7 @@ function App() {
         <Route path="/profile" exact component={Profile} />
         <Route path="/profile/:uid" exact component={Profile} />
       </Switch>
-      {false && <Detail />}
+      {isDetailOpen && <Detail />}
     </Router>
   );
 }

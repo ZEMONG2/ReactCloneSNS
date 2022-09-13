@@ -27,6 +27,9 @@
   border-radius: 40px;
   background-color: #c8c8c8;
   margin-right: 12px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .mainfeed .wrapper .feed-list .write-feed .inp {
   flex: 1;
@@ -143,6 +146,9 @@
   border-radius: 40px;
   background-color: #c8c8c8;
   margin-right: 12px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .mainfeed .wrapper .friend-list .my-profile .nickname {
   font-size: 12px;

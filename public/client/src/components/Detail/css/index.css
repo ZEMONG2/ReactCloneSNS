@@ -1,4 +1,5 @@
 #root .feed-detail {
+  z-index: 31;
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -41,8 +42,12 @@
   background-color: #c8c8c8;
   flex-shrink: 0;
   border-radius: 15px 0 0 15px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .feed-detail .wrapper .contents {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -61,6 +66,9 @@
   border-radius: 43px;
   background-color: #c8c8c8;
   margin-right: 16px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .feed-detail .wrapper .contents .feed-content .top .feed-desc .nickname {
   font-size: 16px;
@@ -128,6 +136,9 @@
   border-radius: 33px;
   background-color: #c8c8c8;
   margin-right: 16px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .feed-detail .wrapper .contents .feed-comments .comment-form .top .left .feed-desc .nickname {
   font-size: 12px;
@@ -162,6 +173,7 @@
   margin-top: 6px;
   font-size: 10px;
   color: #5085e8;
+  cursor: pointer;
 }
 #root .feed-detail .wrapper .contents .feed-comments .comment-form .body {
   font-size: 12px;
@@ -185,6 +197,9 @@
   background-color: #c8c8c8;
   margin-right: 14px;
   flex-shrink: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 #root .feed-detail .wrapper .contents .feed-write-comment .write-comment {
   flex: 1;
